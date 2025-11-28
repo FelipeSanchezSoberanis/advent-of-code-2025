@@ -64,46 +64,40 @@ public class Day01 {
     return machines;
   }
 
-  public Optional<Integer> getMinimumTokens(Machine machine) {
+  public Optional<Long> getMinimumTokens(Machine machine, Long prizeOffset, Long maxButtonPresses) {
     Prize prize = machine.getPrize();
+    Long prizeX = prize.getX() + prizeOffset;
+    Long prizeY = prize.getY() + prizeOffset;
+
     Button buttonA = machine.getButtonA();
     Button buttonB = machine.getButtonB();
 
-    int buttonBPresses =
-        Math.min(
-            Math.min(
-                Math.floorDiv(prize.getX(), buttonB.getX()),
-                Math.floorDiv(prize.getY(), buttonB.getY())),
-            100);
+    double buttonAPresses =
+        ((buttonB.getY() * prizeX - buttonB.getX() * prizeY) * 1.0)
+            / ((buttonB.getY() * buttonA.getX() - buttonB.getX() * buttonA.getY()) * 1.0);
 
-    while (buttonBPresses > 0) {
-      int remainingXToPrize = prize.getX() - buttonBPresses * buttonB.getX();
-      int remainingYToPrize = prize.getY() - buttonBPresses * buttonB.getY();
+    if (buttonAPresses <= 0
+        || buttonAPresses > maxButtonPresses
+        || Math.rint(buttonAPresses) != buttonAPresses) return Optional.empty();
 
-      if (remainingXToPrize % buttonA.getX() != 0) {
-        buttonBPresses--;
-        continue;
-      }
-      if (remainingYToPrize % buttonA.getY() != 0) {
-        buttonBPresses--;
-        continue;
-      }
-      if (remainingXToPrize / buttonA.getX() != remainingYToPrize / buttonA.getY()) {
-        buttonBPresses--;
-        continue;
-      }
-      return Optional.of(
-          remainingXToPrize / buttonA.getX() * buttonACost + buttonBPresses * buttonBCost);
-    }
-
-    return Optional.empty();
+    return Optional.of(
+        (prizeX - Math.round(buttonAPresses) * buttonA.getX()) / (buttonB.getX()) * buttonBCost
+            + buttonACost * Math.round(buttonAPresses));
   }
 
-  public int solveCase01(List<Machine> machines) {
+  public long solveCase01(List<Machine> machines) {
     return machines.stream()
-        .map(this::getMinimumTokens)
+        .map(machine -> getMinimumTokens(machine, 0L, 100L))
         .filter(Optional::isPresent)
-        .mapToInt(Optional::get)
+        .mapToLong(Optional::get)
+        .sum();
+  }
+
+  public long solveCase02(List<Machine> machines) {
+    return machines.stream()
+        .map(machine -> getMinimumTokens(machine, 10000000000000L, Long.MAX_VALUE))
+        .filter(Optional::isPresent)
+        .mapToLong(Optional::get)
         .sum();
   }
 

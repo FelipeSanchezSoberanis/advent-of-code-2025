@@ -27,4 +27,9 @@ public class Day01Test {
   public void testProblem01() {
     assertEquals(36758, day01.solveCase01(input));
   }
+
+  // @Test
+  // public void testProblem02() {
+  //   assertEquals(0, day01.solveCase02(input));
+  // }
 }
