@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.stream.IntStream;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -45,12 +46,9 @@ public class Day00 {
     firstList.sort(Integer::compare);
     secondList.sort(Integer::compare);
 
-    int result = 0;
-    for (int i = 0; i < Math.min(firstList.size(), secondList.size()); i++) {
-      result += Math.abs(firstList.get(i) - secondList.get(i));
-    }
-
-    return result;
+    return IntStream.range(0, firstList.size())
+        .map(i -> Math.abs(firstList.get(i) - secondList.get(i)))
+        .sum();
   }
 
   public Integer solveCase02(Input input) {
