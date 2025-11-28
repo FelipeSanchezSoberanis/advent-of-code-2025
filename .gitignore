@@ -50,3 +50,5 @@ hs_err_pid*
 replay_pid*
 .settings/
 .factorypath
+app/src/main/resources/inputs/**/*.txt
+!app/src/main/resources/inputs/**/*.example.txt
