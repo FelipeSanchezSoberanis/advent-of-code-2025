@@ -41,6 +41,7 @@ jobs:
       - name: Build with Gradle
         run: |
           echo "${{ secrets.DAY00_INPUT_TXT }}" > app/src/main/resources/inputs/day00/input.txt
+          echo "${{ secrets.DAY01_INPUT_TXT }}" > app/src/main/resources/inputs/day01/input.txt
           gradle wrapper
           ./gradlew test --tests "*.testProblem*"
       - name: Setup Pages
