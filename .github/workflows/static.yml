@@ -40,6 +40,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v5
       - name: Build with Gradle
         run: | 
+          echo "${{ secrets.DAY00_INPUT_TXT }}" > app/src/main/resources/inputs/day00/input.txt
           gradle wrapper
           ./gradlew test
       - name: Setup Pages
