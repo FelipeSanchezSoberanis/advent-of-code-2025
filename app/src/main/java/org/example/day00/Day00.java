@@ -38,7 +38,7 @@ public class Day00 {
     return Input.builder().firstList(firstList).secondList(secondList).build();
   }
 
-  public Integer distanceBetweenLists(Input input) {
+  public Integer solveCase01(Input input) {
     List<Integer> firstList = input.getFirstList();
     List<Integer> secondList = input.getSecondList();
 
@@ -53,7 +53,7 @@ public class Day00 {
     return result;
   }
 
-  public Integer similarityBetweenLists(Input input) {
+  public Integer solveCase02(Input input) {
     Map<Integer, Integer> frequency =
         input.getSecondList().stream()
             .collect(
