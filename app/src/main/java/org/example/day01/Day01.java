@@ -1,29 +1,26 @@
 package org.example.day01;
 
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
-import java.util.function.BinaryOperator;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
 public class Day01 {
   private final String inputsDir;
-  private final BigDecimal buttonACost;
-  private final BigDecimal buttonBCost;
+  private final Long buttonACost;
+  private final Long buttonBCost;
 
   public Day01() {
     this.inputsDir =
         Paths.get(System.getProperty("user.dir"), "src", "main", "resources", "inputs", "day01")
             .toString();
-    this.buttonACost = new BigDecimal("3");
-    this.buttonBCost = new BigDecimal("1");
+    this.buttonACost = 3L;
+    this.buttonBCost = 1L;
   }
 
   public List<Machine> parseInput(String filename) throws IOException {
@@ -56,9 +53,9 @@ public class Day01 {
                     .x(Integer.parseInt(line.substring(line.indexOf("X=") + 2, line.indexOf(","))))
                     .y(Integer.parseInt(line.substring(line.indexOf("Y=") + 2)))
                     .build();
+            machines.add(Machine.builder().buttonA(buttonA).buttonB(buttonB).prize(prize).build());
             break;
           case 3:
-            machines.add(Machine.builder().buttonA(buttonA).buttonB(buttonB).prize(prize).build());
             break;
         }
         i++;
@@ -67,76 +64,58 @@ public class Day01 {
     return machines;
   }
 
-  public boolean bigDecimalIsInteger(BigDecimal bigDecimal) {
-    return bigDecimal.stripTrailingZeros().scale() <= 0;
-  }
-
-  public Optional<BigDecimal> getMinimumTokens(
-      Machine machine, BigDecimal prizeOffset, BigDecimal maxButtonPresses) {
+  public Optional<Long> getMinimumTokens(Machine machine, Long prizeOffset, Long maxButtonPresses) {
     Prize prize = machine.getPrize();
-    BigDecimal prizeX = prizeOffset.add(BigDecimal.valueOf(prize.getX()));
-    BigDecimal prizeY = prizeOffset.add(BigDecimal.valueOf(prize.getY()));
+    Long prizeX = prizeOffset + prize.getX();
+    Long prizeY = prizeOffset + prize.getY();
 
     Button buttonA = machine.getButtonA();
-    BigDecimal buttonAX = BigDecimal.valueOf(buttonA.getX());
-    BigDecimal buttonAY = BigDecimal.valueOf(buttonA.getY());
+    Long buttonAX = Long.valueOf(buttonA.getX());
+    Long buttonAY = Long.valueOf(buttonA.getY());
 
     Button buttonB = machine.getButtonB();
-    BigDecimal buttonBX = BigDecimal.valueOf(buttonB.getX());
-    BigDecimal buttonBY = BigDecimal.valueOf(buttonB.getY());
+    Long buttonBX = Long.valueOf(buttonB.getX());
+    Long buttonBY = Long.valueOf(buttonB.getY());
 
-    BigDecimal buttonAPresses =
-        buttonBY
-            .multiply(prizeX)
-            .subtract(buttonBX.multiply(prizeY))
-            .divide(
-                buttonBY.multiply(buttonAX).subtract(buttonBX.multiply(buttonAY)),
-                10,
-                RoundingMode.HALF_UP)
-            .stripTrailingZeros();
+    Double buttonAPresses =
+        ((buttonBY * prizeX - buttonBX * prizeY) * 1.0)
+            / ((buttonBY * buttonAX - buttonBX * buttonAY) * 1.0);
 
-    if (buttonAPresses.compareTo(new BigDecimal("0")) < 0
-        || (maxButtonPresses != null && buttonAPresses.compareTo(maxButtonPresses) > 0)
-        || !bigDecimalIsInteger(buttonAPresses)) return Optional.empty();
+    double epsilon = 1e-20;
 
-    BigDecimal buttonBPresses =
-        prizeX
-            .subtract(buttonAPresses.multiply(buttonAX))
-            .divide(buttonBX, 10, RoundingMode.HALF_UP);
+    if (buttonAPresses < 0
+        || buttonAPresses > maxButtonPresses
+        || (buttonAPresses % 1 > 0 + epsilon && buttonAPresses % 1 < 1 - epsilon)) {
+      return Optional.empty();
+    }
 
-    if (!bigDecimalIsInteger(buttonBPresses)) {
-      System.out.println("prizeX: " + prizeX);
-      System.out.println("buttonAPresses: " + buttonAPresses);
-      System.out.println("buttonAX: " + buttonAX);
-      System.out.println("buttonBX: " + buttonBX);
-      System.out.println("divide: " + buttonBPresses);
+    Double buttonBPresses =
+        ((prizeX - (buttonAPresses.longValue() * buttonAX)) * 1.0) / (buttonBX * 1.0);
+
+    if (buttonBPresses < 0
+        || buttonBPresses > maxButtonPresses
+        || (buttonBPresses % 1 > 0 + epsilon && buttonBPresses % 1 < 1 - epsilon)) {
+      return Optional.empty();
     }
 
     return Optional.of(
-        buttonBPresses
-            .multiply(buttonBCost)
-            .add(buttonACost.multiply(buttonAPresses))
-            .stripTrailingZeros());
+        buttonBPresses.longValue() * buttonBCost + buttonAPresses.longValue() * buttonACost);
   }
 
-  public BigDecimal solveCase01(List<Machine> machines) {
-    BinaryOperator<BigDecimal> binaryOperator = (a, b) -> a.add(b);
+  public Long solveCase01(List<Machine> machines) {
     return machines.stream()
-        .map(machine -> getMinimumTokens(machine, new BigDecimal("0"), new BigDecimal("100")))
+        .map(machine -> getMinimumTokens(machine, 0L, 100L))
         .filter(Optional::isPresent)
-        .map(Optional::get)
-        .reduce(
-            new BigDecimal("0"), (acc, minimumTokens) -> acc.add(minimumTokens), binaryOperator);
+        .mapToLong(Optional::get)
+        .sum();
   }
 
-  public BigDecimal solveCase02(List<Machine> machines) {
-    BinaryOperator<BigDecimal> binaryOperator = (a, b) -> a.add(b);
+  public Long solveCase02(List<Machine> machines) {
     return machines.stream()
-        .map(machine -> getMinimumTokens(machine, new BigDecimal("10000000000000"), null))
+        .map(machine -> getMinimumTokens(machine, 10000000000000L, Long.MAX_VALUE))
         .filter(Optional::isPresent)
-        .map(Optional::get)
-        .reduce(
-            new BigDecimal("0"), (acc, minimumTokens) -> acc.add(minimumTokens), binaryOperator);
+        .mapToLong(Optional::get)
+        .sum();
   }
 
   @Builder

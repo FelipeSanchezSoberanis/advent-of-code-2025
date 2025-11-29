@@ -3,7 +3,6 @@ package org.example.day01;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.List;
 import org.example.day01.Day01.Machine;
 import org.junit.jupiter.api.Test;
@@ -21,16 +20,16 @@ public class Day01Test {
 
   @Test
   public void testExample01() {
-    assertEquals(new BigDecimal("480"), day01.solveCase01(exampleInput));
+    assertEquals(480L, day01.solveCase01(exampleInput));
   }
 
   @Test
   public void testProblem01() {
-    assertEquals(new BigDecimal("36758"), day01.solveCase01(input));
+    assertEquals(36758L, day01.solveCase01(input));
   }
 
   @Test
   public void testProblem02() {
-    assertEquals(0, day01.solveCase02(input));
+    assertEquals(76358113886726L, day01.solveCase02(input));
   }
 }
