@@ -81,20 +81,14 @@ public class Day01 {
         ((buttonBY * prizeX - buttonBX * prizeY) * 1.0)
             / ((buttonBY * buttonAX - buttonBX * buttonAY) * 1.0);
 
-    double epsilon = 1e-20;
-
-    if (buttonAPresses < 0
-        || buttonAPresses > maxButtonPresses
-        || (buttonAPresses % 1 > 0 + epsilon && buttonAPresses % 1 < 1 - epsilon)) {
+    if (buttonAPresses < 0 || buttonAPresses > maxButtonPresses || buttonAPresses % 1 != 0) {
       return Optional.empty();
     }
 
     Double buttonBPresses =
         ((prizeX - (buttonAPresses.longValue() * buttonAX)) * 1.0) / (buttonBX * 1.0);
 
-    if (buttonBPresses < 0
-        || buttonBPresses > maxButtonPresses
-        || (buttonBPresses % 1 > 0 + epsilon && buttonBPresses % 1 < 1 - epsilon)) {
+    if (buttonBPresses < 0 || buttonBPresses > maxButtonPresses || buttonBPresses % 1 != 0) {
       return Optional.empty();
     }
 
