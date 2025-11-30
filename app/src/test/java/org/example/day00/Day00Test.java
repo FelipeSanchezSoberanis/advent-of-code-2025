@@ -18,21 +18,21 @@ public class Day00Test {
 
   @Test
   public void testExample01() {
-    assertEquals(11, day00.solveCase01(exampleInput));
+    assertEquals(11, day00.solvePart01(exampleInput));
   }
 
   @Test
-  public void testProblem01() {
-    assertEquals(1941353, day00.solveCase01(input));
+  public void testPart01() {
+    assertEquals(1941353, day00.solvePart01(input));
   }
 
   @Test
   public void testExample02() {
-    assertEquals(31, day00.solveCase02(exampleInput));
+    assertEquals(31, day00.solvePart02(exampleInput));
   }
 
   @Test
-  public void testProblem02() {
-    assertEquals(22539317, day00.solveCase02(input));
+  public void testPart02() {
+    assertEquals(22539317, day00.solvePart02(input));
   }
 }

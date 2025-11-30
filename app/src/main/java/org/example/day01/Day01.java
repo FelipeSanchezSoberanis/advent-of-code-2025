@@ -96,7 +96,7 @@ public class Day01 {
         buttonBPresses.longValue() * buttonBCost + buttonAPresses.longValue() * buttonACost);
   }
 
-  public Long solveCase01(List<Machine> machines) {
+  public Long solvePart01(List<Machine> machines) {
     return machines.stream()
         .map(machine -> getMinimumTokens(machine, 0L, 100L))
         .filter(Optional::isPresent)
@@ -104,7 +104,7 @@ public class Day01 {
         .sum();
   }
 
-  public Long solveCase02(List<Machine> machines) {
+  public Long solvePart02(List<Machine> machines) {
     return machines.stream()
         .map(machine -> getMinimumTokens(machine, 10000000000000L, Long.MAX_VALUE))
         .filter(Optional::isPresent)

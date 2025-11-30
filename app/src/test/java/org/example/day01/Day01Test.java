@@ -20,16 +20,16 @@ public class Day01Test {
 
   @Test
   public void testExample01() {
-    assertEquals(480L, day01.solveCase01(exampleInput));
+    assertEquals(480L, day01.solvePart01(exampleInput));
   }
 
   @Test
-  public void testProblem01() {
-    assertEquals(36758L, day01.solveCase01(input));
+  public void testPart01() {
+    assertEquals(36758L, day01.solvePart01(input));
   }
 
   @Test
-  public void testProblem02() {
-    assertEquals(76358113886726L, day01.solveCase02(input));
+  public void testPart02() {
+    assertEquals(76358113886726L, day01.solvePart02(input));
   }
 }

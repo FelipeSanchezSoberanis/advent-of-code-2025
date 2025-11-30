@@ -39,7 +39,7 @@ public class Day00 {
     return Input.builder().firstList(firstList).secondList(secondList).build();
   }
 
-  public Integer solveCase01(Input input) {
+  public Integer solvePart01(Input input) {
     List<Integer> firstList = input.getFirstList();
     List<Integer> secondList = input.getSecondList();
 
@@ -51,7 +51,7 @@ public class Day00 {
         .sum();
   }
 
-  public Integer solveCase02(Input input) {
+  public Integer solvePart02(Input input) {
     Map<Integer, Integer> frequency =
         input.getSecondList().stream()
             .collect(
