@@ -8,6 +8,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { SquareArrowOutUpRight } from "lucide-react";
+import { ThemeToggler } from "./components/theme-toggler";
 
 type TestReport = {
   "?xml": { "@_version": string; "@_encoding": string };
@@ -56,7 +57,10 @@ export default async function Home() {
   return (
     <main className="p-4">
       <div className="container mx-auto">
-        <h1 className="text-2xl">Advent of Code 2025</h1>
+        <div className="flex justify-between">
+          <h1 className="text-2xl">Advent of Code 2025</h1>
+          <ThemeToggler />
+        </div>
         <h2 className="text-xl">Felipe Sánchez Soberanis</h2>
         <h3>
           Total time:{" "}
