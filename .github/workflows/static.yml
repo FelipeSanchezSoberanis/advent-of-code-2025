@@ -46,7 +46,8 @@ jobs:
         run: |
           echo "${{ secrets.DAY01_INPUT_TXT }}" > app/src/main/resources/inputs/day01/input.txt
           gradle wrapper
-          ./gradlew test --tests "*.testPart*"
+          ./gradlew test
+          ./gradlew run
       - name: Build with Node
         run: |
           cd tests-report

@@ -1,4 +1,3 @@
-import { XMLParser } from "fast-xml-parser";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import {
@@ -12,53 +11,20 @@ import { ThemeToggler } from "./components/theme-toggler";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Progress } from "@/components/ui/progress";
 
-type TestReport = {
-  "?xml": { "@_version": string; "@_encoding": string };
-  testsuite: {
-    properties: string;
-    testcase: ({
-      "@_name": string;
-      "@_classname": string;
-      "@_time": string;
-    } | null)[];
-    "system-out": string;
-    "system-err": string;
-    "@_name": string;
-    "@_tests": string;
-    "@_skipped": string;
-    "@_failures": string;
-    "@_errors": string;
-    "@_timestamp": string;
-    "@_hostname": string;
-    "@_time": string;
-  };
+const nsToMs = (ns: number) => Number((ns / 1000000).toFixed(3));
+
+type DayStats = {
+  day: number;
+  partOneDurationNs?: number;
+  partTwoDurationNs?: number;
 };
 
 export default async function Home() {
-  const days = [
-    ...Array(1)
-      .keys()
-      .map((day) => day + 1),
-  ];
-
-  const files = days.map((day) =>
-    path.join(
-      "..",
-      "app",
-      "build",
-      "test-results",
-      "test",
-      `TEST-org.example.day${day.toString().padStart(2, "0")}.Day${day.toString().padStart(2, "0")}Test.xml`,
-    ),
-  );
-
-  const xmlParser = new XMLParser({ ignoreAttributes: false });
-  const reports: TestReport[] = await Promise.all(
-    files.map(async (file) => {
-      const fileContent = await readFile(file, { encoding: "utf-8" });
-      return xmlParser.parse(fileContent);
+  const stats = JSON.parse(
+    await readFile(path.join("..", "app", "build", "stats.json"), {
+      encoding: "utf-8",
     }),
-  );
+  ) as DayStats[];
 
   return (
     <main className="p-4">
@@ -79,73 +45,62 @@ export default async function Home() {
         </div>
         <h3 className="pt-1">
           Total time:{" "}
-          {reports.reduce((acc, report) => {
-            return (
-              acc +
-              report.testsuite.testcase.reduce((accTwo, testcase) => {
-                if (!testcase || testcase["@_name"].includes("Part00")) {
-                  return accTwo;
-                }
-                return accTwo + Number(testcase["@_time"]) * 1000;
-              }, 0)
-            );
-          }, 0)}
+          {nsToMs(
+            stats.reduce(
+              (acc, stat) =>
+                acc +
+                (stat.partOneDurationNs || 0) +
+                (stat.partTwoDurationNs || 0),
+              0,
+            ),
+          )}{" "}
           ms
         </h3>
         <div className="py-4 flex flex-col gap-2">
-          Currently on day {days.length} of 12
-          <Progress value={(days.length / 12) * 100} />
+          Currently on day {stats.length} of 12
+          <Progress value={(stats.length / 12) * 100} />
         </div>
         <Accordion
           type="multiple"
-          defaultValue={days.map((_, i) => reports[i].testsuite["@_name"])}
+          defaultValue={stats.map((stat) => stat.day.toString())}
         >
-          {days.map((day, i) => {
-            const report = reports[i];
-            const partOne = report.testsuite.testcase.find(
-              (testcase) => !!testcase && testcase["@_name"].includes("Part01"),
-            );
-            const partTwo = report.testsuite.testcase.find(
-              (testcase) => !!testcase && testcase["@_name"].includes("Part02"),
-            );
+          {stats.map((stat) => {
             return (
               <AccordionItem
-                key={report.testsuite["@_name"]}
-                value={report.testsuite["@_name"]}
+                key={stat.day.toString()}
+                value={stat.day.toString()}
               >
                 <AccordionTrigger className="text-base">
-                  <div className="w-full">Day {day}</div>
+                  <div className="w-full">Day {stat.day}</div>
                   <div className="whitespace-nowrap">
-                    {report.testsuite.testcase.reduce((acc, testcase) => {
-                      if (!testcase || testcase["@_name"].includes("Part00")) {
-                        return acc;
-                      }
-                      return acc + Number(testcase["@_time"]) * 1000;
-                    }, 0)}{" "}
+                    {nsToMs(
+                      (stat.partOneDurationNs || 0) +
+                        (stat.partTwoDurationNs || 0),
+                    )}{" "}
                     ms
                   </div>
                 </AccordionTrigger>
                 <AccordionContent className="text-base">
-                  {!!partOne && (
+                  {!!stat.partOneDurationNs && (
                     <div className="flex justify-between">
                       <div>Part 1</div>
-                      <div>{Number(partOne["@_time"]) * 1000} ms</div>
+                      <div>{nsToMs(stat.partOneDurationNs)} ms</div>
                     </div>
                   )}
-                  {!!partTwo && (
+                  {!!stat.partTwoDurationNs && (
                     <div className="flex justify-between">
                       <div>Part 2</div>
-                      <div>{Number(partTwo["@_time"]) * 1000} ms</div>
+                      <div>{nsToMs(stat.partTwoDurationNs)} ms</div>
                     </div>
                   )}
                   <div className="pt-4 text-blue-600">
                     <a
-                      href={`https://github.com/FelipeSanchezSoberanis/advent-of-code-2025/blob/main/app/src/main/java/org/example/day${day.toString().padStart(2, "0")}/Day${day.toString().padStart(2, "0")}.java`}
+                      href={`https://github.com/FelipeSanchezSoberanis/advent-of-code-2025/blob/main/app/src/main/java/org/example/day${stat.day.toString().padStart(2, "0")}/Day${stat.day.toString().padStart(2, "0")}.java`}
                       target="_blank"
                       rel="noreferrer noopener"
                     >
                       <div className="flex items-center gap-1">
-                        <div>See code for day {day}</div>
+                        <div>See code for day {stat.day}</div>
                         <SquareArrowOutUpRight className="size-4" />
                       </div>
                     </a>
