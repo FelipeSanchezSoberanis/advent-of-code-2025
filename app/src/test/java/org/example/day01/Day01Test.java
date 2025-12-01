@@ -1,6 +1,7 @@
 package org.example.day01;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.util.List;
@@ -15,6 +16,11 @@ public class Day01Test {
     this.day01 = new Day01();
     this.exampleRotations = day01.parseInput("input.example.txt");
     this.rotations = day01.parseInput("input.txt");
+  }
+
+  @Test
+  public void testPart00() {
+    assertTrue(true);
   }
 
   @Test

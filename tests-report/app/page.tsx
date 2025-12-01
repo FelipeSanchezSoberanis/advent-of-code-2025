@@ -83,7 +83,9 @@ export default async function Home() {
             return (
               acc +
               report.testsuite.testcase.reduce((accTwo, testcase) => {
-                if (!testcase) return accTwo;
+                if (!testcase || testcase["@_name"].includes("Part00")) {
+                  return accTwo;
+                }
                 return accTwo + Number(testcase["@_time"]) * 1000;
               }, 0)
             );
@@ -114,12 +116,12 @@ export default async function Home() {
                 <AccordionTrigger className="text-base">
                   <div className="w-full">Day {day}</div>
                   <div className="whitespace-nowrap">
-                    {report.testsuite.testcase.reduce(
-                      (acc, testcase) =>
-                        acc +
-                        (testcase ? Number(testcase["@_time"]) * 1000 : 0),
-                      0,
-                    )}{" "}
+                    {report.testsuite.testcase.reduce((acc, testcase) => {
+                      if (!testcase || testcase["@_name"].includes("Part00")) {
+                        return acc;
+                      }
+                      return acc + Number(testcase["@_time"]) * 1000;
+                    }, 0)}{" "}
                     ms
                   </div>
                 </AccordionTrigger>
