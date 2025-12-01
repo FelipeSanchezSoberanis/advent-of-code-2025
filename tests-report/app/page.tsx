@@ -1,6 +1,13 @@
 import { XMLParser } from "fast-xml-parser";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { SquareArrowOutUpRight } from "lucide-react";
 
 type TestReport = {
   "?xml": { "@_version": string; "@_encoding": string };
@@ -46,38 +53,80 @@ export default async function Home() {
     }),
   );
 
-  return days.map((day, i) => {
-    const report = reports[i];
-    const partOne = report.testsuite.testcase[0];
-    const partTwo = report.testsuite.testcase[1];
-    return (
-      <div key={report.testsuite["@_name"]}>
-        <div>
-          <div>Day {day}</div>
-          <div>
-            {report.testsuite.testcase.reduce(
-              (acc, testcase) =>
-                acc + (testcase ? Number(testcase["@_time"]) * 1000 : 0),
-              0,
-            )}
-            ms
-          </div>
-        </div>
-        <div>
-          {!!partOne && (
-            <div>
-              <div>Part 1</div>
-              <div>{Number(partOne["@_time"]) * 1000} ms</div>
-            </div>
-          )}
-          {!!partTwo && (
-            <div>
-              <div>Part 2</div>
-              <div>{Number(partTwo["@_time"]) * 1000} ms</div>
-            </div>
-          )}
-        </div>
+  return (
+    <main className="p-4">
+      <div className="container mx-auto">
+        <h1 className="text-2xl">Advent of Code 2025</h1>
+        <h2 className="text-xl">Felipe Sánchez Soberanis</h2>
+        <h3>
+          Total time:{" "}
+          {reports.reduce((acc, report) => {
+            return (
+              acc +
+              report.testsuite.testcase.reduce((accTwo, testcase) => {
+                if (!testcase) return accTwo;
+                return accTwo + Number(testcase["@_time"]) * 1000;
+              }, 0)
+            );
+          }, 0)}
+          ms
+        </h3>
+        <Accordion
+          type="multiple"
+          defaultValue={days.map((_, i) => reports[i].testsuite["@_name"])}
+        >
+          {days.map((day, i) => {
+            const report = reports[i];
+            const partOne = report.testsuite.testcase[0];
+            const partTwo = report.testsuite.testcase[1];
+            return (
+              <AccordionItem
+                key={report.testsuite["@_name"]}
+                value={report.testsuite["@_name"]}
+              >
+                <AccordionTrigger className="text-base">
+                  <div className="w-full">Day {day}</div>
+                  <div className="whitespace-nowrap">
+                    {report.testsuite.testcase.reduce(
+                      (acc, testcase) =>
+                        acc +
+                        (testcase ? Number(testcase["@_time"]) * 1000 : 0),
+                      0,
+                    )}{" "}
+                    ms
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent className="text-base">
+                  {!!partOne && (
+                    <div className="flex justify-between">
+                      <div>Part 1</div>
+                      <div>{Number(partOne["@_time"]) * 1000} ms</div>
+                    </div>
+                  )}
+                  {!!partTwo && (
+                    <div className="flex justify-between">
+                      <div>Part 2</div>
+                      <div>{Number(partTwo["@_time"]) * 1000} ms</div>
+                    </div>
+                  )}
+                  <div className="pt-4 text-blue-600">
+                    <a
+                      href={`https://github.com/FelipeSanchezSoberanis/advent-of-code-2025/blob/main/app/src/main/java/org/example/day${day.toString().padStart(2, "0")}/Day${day.toString().padStart(2, "0")}.java`}
+                      target="_blank"
+                      rel="noreferrer noopener"
+                    >
+                      <div className="flex items-center gap-1">
+                        <div>See code for day {day}</div>
+                        <SquareArrowOutUpRight className="size-4" />
+                      </div>
+                    </a>
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+            );
+          })}
+        </Accordion>
       </div>
-    );
-  });
+    </main>
+  );
 }
