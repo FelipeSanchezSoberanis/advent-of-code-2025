@@ -2,18 +2,31 @@
 
 import { Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useEffect } from "react";
 
 export function ThemeToggler() {
   const handleClick = () => {
     const theme = document.documentElement.getAttribute("class");
-    if (theme === "dark") {
+    if (theme === "dark" || theme === "system dark") {
       document.documentElement.setAttribute("class", "light");
       document.documentElement.setAttribute("style", "color-scheme: light;");
-    } else if (theme === "light") {
+      localStorage.setItem("theme", "light");
+    } else {
       document.documentElement.setAttribute("class", "dark");
       document.documentElement.setAttribute("style", "color-scheme: dark;");
+      localStorage.setItem("theme", "dark");
     }
   };
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme");
+    if (!savedTheme) return;
+    document.documentElement.setAttribute("class", savedTheme);
+    document.documentElement.setAttribute(
+      "style",
+      `color-scheme: ${savedTheme};`,
+    );
+  }, []);
 
   return (
     <Button variant="outline" size="icon" onClick={handleClick}>
