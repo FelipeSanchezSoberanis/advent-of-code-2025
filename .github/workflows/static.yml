@@ -51,7 +51,7 @@ jobs:
       - name: Build with Node
         run: |
           cd tests-report
-          npm i
+          npm ci
           npm run build
       - name: Setup Pages
         uses: actions/configure-pages@v5
