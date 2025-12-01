@@ -38,18 +38,27 @@ jobs:
           java-version: 25
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v5
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
       - name: Build with Gradle
         run: |
           echo "${{ secrets.DAY00_INPUT_TXT }}" > app/src/main/resources/inputs/day00/input.txt
           echo "${{ secrets.DAY01_INPUT_TXT }}" > app/src/main/resources/inputs/day01/input.txt
           gradle wrapper
           ./gradlew test --tests "*.testPart*"
+      - name: Build with Node
+        run: |
+          cd tests-report
+          npm i
+          npm run build
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'app/build/reports/tests/test/'
+          path: 'tests-report/out/'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
