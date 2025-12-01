@@ -9,6 +9,8 @@ import {
 } from "@/components/ui/accordion";
 import { SquareArrowOutUpRight } from "lucide-react";
 import { ThemeToggler } from "./components/theme-toggler";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import Image from "next/image";
 
 type TestReport = {
   "?xml": { "@_version": string; "@_encoding": string };
@@ -61,7 +63,16 @@ export default async function Home() {
           <h1 className="text-2xl">Advent of Code 2025</h1>
           <ThemeToggler />
         </div>
-        <h2 className="text-xl">Felipe Sánchez Soberanis</h2>
+        <div className="flex gap-2 items-center">
+          <Avatar>
+            <AvatarImage
+              src="https://avatars.githubusercontent.com/u/59965745"
+              alt="FelipeSanchezSoberanis"
+            />
+            <AvatarFallback>FSS</AvatarFallback>
+          </Avatar>
+          <h2 className="text-xl">Felipe Sánchez Soberanis</h2>
+        </div>
         <h3>
           Total time:{" "}
           {reports.reduce((acc, report) => {
