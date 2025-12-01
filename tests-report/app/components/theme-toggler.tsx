@@ -1,15 +1,18 @@
 "use client";
 
 import { Moon, Sun } from "lucide-react";
-import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
 
 export function ThemeToggler() {
-  const { setTheme, theme } = useTheme();
-
   const handleClick = () => {
-    if (theme === "dark") setTheme("light");
-    else if (theme === "light") setTheme("dark");
+    const theme = document.documentElement.getAttribute("class");
+    if (theme === "dark") {
+      document.documentElement.setAttribute("class", "light");
+      document.documentElement.setAttribute("style", "color-scheme: light;");
+    } else if (theme === "light") {
+      document.documentElement.setAttribute("class", "dark");
+      document.documentElement.setAttribute("style", "color-scheme: dark;");
+    }
   };
 
   return (
