@@ -26,4 +26,14 @@ public class Day01Test {
   public void testPart01() {
     assertEquals(1191, day01.solvePartOne(rotations));
   }
+
+  @Test
+  public void testExample02() {
+    assertEquals(6, day01.solvePartTwo(exampleRotations));
+  }
+
+  @Test
+  public void testPart02() {
+    assertEquals(6858, day01.solvePartTwo(rotations));
+  }
 }

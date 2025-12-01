@@ -75,6 +75,44 @@ public class Day01 {
         .getValue();
   }
 
+  public Integer solvePartTwo(List<Rotation> rotations) {
+    return rotations.stream()
+        .collect(
+            () -> Tracker.builder().position(50).value(0).build(),
+            (acc, rotation) -> {
+              int position = acc.getPosition();
+              boolean startedAtZero = position == 0;
+              int fullRotations = Math.floorDiv(rotation.getValue(), 100);
+
+              switch (rotation.getDirection()) {
+                case LEFT:
+                  position -= rotation.getValue() % 100;
+                  break;
+                case RIGHT:
+                  position += rotation.getValue() % 100;
+                  break;
+              }
+
+              if (position > 99) {
+                position -= 100;
+                if (!startedAtZero) acc.setValue(acc.getValue() + 1);
+              } else if (position < 0) {
+                position += 100;
+                if (!startedAtZero) acc.setValue(acc.getValue() + 1);
+              } else if (position == 0) {
+                acc.setValue(acc.getValue() + 1);
+              }
+              acc.setValue(acc.getValue() + fullRotations);
+
+              acc.setPosition(position);
+            },
+            (BiConsumer<Tracker, Tracker>)
+                (acc, tracker) -> {
+                  acc.setValue(acc.getValue() + tracker.getValue());
+                })
+        .getValue();
+  }
+
   @Builder
   @Getter
   @Setter
