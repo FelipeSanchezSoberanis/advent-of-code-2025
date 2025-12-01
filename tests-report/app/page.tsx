@@ -35,7 +35,11 @@ type TestReport = {
 };
 
 export default async function Home() {
-  const days = [...Array(2).keys()];
+  const days = [
+    ...Array(1)
+      .keys()
+      .map((day) => day + 1),
+  ];
 
   const files = days.map((day) =>
     path.join(
@@ -96,8 +100,12 @@ export default async function Home() {
         >
           {days.map((day, i) => {
             const report = reports[i];
-            const partOne = report.testsuite.testcase[0];
-            const partTwo = report.testsuite.testcase[1];
+            const partOne = report.testsuite.testcase.find(
+              (testcase) => !!testcase && testcase["@_name"].includes("Part01"),
+            );
+            const partTwo = report.testsuite.testcase.find(
+              (testcase) => !!testcase && testcase["@_name"].includes("Part02"),
+            );
             return (
               <AccordionItem
                 key={report.testsuite["@_name"]}
