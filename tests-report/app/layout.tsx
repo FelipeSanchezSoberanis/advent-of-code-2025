@@ -14,7 +14,15 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "AoC 25' - Felipe Sánchez Soberanis",
+  title: "Felipe's 2025 Advent of Code stats",
+  description: "Check out my 2025 Advent of Code stats!",
+  authors: { name: "Felipe Sánchez Soberanis" },
+  openGraph: {
+    title: "Felipe's 2025 Advent of Code stats",
+    description: "Check out my 2025 Advent of Code stats!",
+    authors: "Felipe Sánchez Soberanis",
+    images: "https://avatars.githubusercontent.com/u/59965745",
+  },
 };
 
 export default function RootLayout({

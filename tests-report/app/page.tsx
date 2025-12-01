@@ -10,7 +10,7 @@ import {
 import { SquareArrowOutUpRight } from "lucide-react";
 import { ThemeToggler } from "./components/theme-toggler";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import Image from "next/image";
+import { Progress } from "@/components/ui/progress";
 
 type TestReport = {
   "?xml": { "@_version": string; "@_encoding": string };
@@ -73,7 +73,7 @@ export default async function Home() {
           </Avatar>
           <h2 className="text-xl">Felipe Sánchez Soberanis</h2>
         </div>
-        <h3>
+        <h3 className="pt-1">
           Total time:{" "}
           {reports.reduce((acc, report) => {
             return (
@@ -86,6 +86,10 @@ export default async function Home() {
           }, 0)}
           ms
         </h3>
+        <div className="py-4 flex flex-col gap-2">
+          Currently on day {days.length} of 12
+          <Progress value={(days.length / 12) * 100} />
+        </div>
         <Accordion
           type="multiple"
           defaultValue={days.map((_, i) => reports[i].testsuite["@_name"])}
