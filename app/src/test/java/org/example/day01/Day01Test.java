@@ -19,21 +19,21 @@ public class Day01Test {
 
   @Test
   public void testExample01() {
-    assertEquals(3, day01.solvePartOne(exampleRotations));
+    assertEquals(3, day01.solvePart01(exampleRotations));
   }
 
   @Test
   public void testPart01() {
-    assertEquals(1191, day01.solvePartOne(rotations));
+    assertEquals(1191, day01.solvePart01(rotations));
   }
 
   @Test
   public void testExample02() {
-    assertEquals(6, day01.solvePartTwo(exampleRotations));
+    assertEquals(6, day01.solvePart02(exampleRotations));
   }
 
   @Test
   public void testPart02() {
-    assertEquals(6858, day01.solvePartTwo(rotations));
+    assertEquals(6858, day01.solvePart02(rotations));
   }
 }

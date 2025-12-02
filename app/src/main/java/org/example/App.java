@@ -39,8 +39,8 @@ public class App {
     List<Day01.Rotation> rotations = day01.parseInput("input.txt");
     return DayStats.builder()
         .day(1)
-        .partOneDurationNs(timeWarmedUpFunction(() -> day01.solvePartOne(rotations)))
-        .partTwoDurationNs(timeWarmedUpFunction(() -> day01.solvePartTwo(rotations)))
+        .partOneDurationNs(timeWarmedUpFunction(() -> day01.solvePart01(rotations)))
+        .partTwoDurationNs(timeWarmedUpFunction(() -> day01.solvePart02(rotations)))
         .build();
   }
 

@@ -46,7 +46,7 @@ public class Day01 {
     return rotations;
   }
 
-  public Integer solvePartOne(List<Rotation> rotations) {
+  public Integer solvePart01(List<Rotation> rotations) {
     return rotations.stream()
         .collect(
             () -> Tracker.builder().position(50).value(0).build(),
@@ -75,7 +75,7 @@ public class Day01 {
         .getValue();
   }
 
-  public Integer solvePartTwo(List<Rotation> rotations) {
+  public Integer solvePart02(List<Rotation> rotations) {
     return rotations.stream()
         .collect(
             () -> Tracker.builder().position(50).value(0).build(),
