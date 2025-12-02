@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 import lombok.Builder;
 import lombok.Getter;
@@ -57,6 +58,34 @@ public class Day02 {
                 return false;
               }
               return true;
+            })
+        .mapToLong(Long::parseLong)
+        .sum();
+  }
+
+  public Long solvePart02(List<IdRange> idRanges) {
+    return idRanges.stream()
+        .flatMap(
+            idRange ->
+                LongStream.rangeClosed(idRange.getStart(), idRange.getEnd())
+                    .mapToObj(Long::toString))
+        .filter(
+            id -> {
+              int end = 1;
+              while (end < id.length()) {
+                if (id.charAt(0) == id.charAt(end) && id.length() % end == 0) {
+                  int size = end;
+                  if (IntStream.range(1, id.length() / size)
+                      .allMatch(
+                          i ->
+                              id.substring(0, size)
+                                  .equals(id.substring(size * i, size * (i + 1))))) {
+                    return true;
+                  }
+                }
+                end++;
+              }
+              return false;
             })
         .mapToLong(Long::parseLong)
         .sum();

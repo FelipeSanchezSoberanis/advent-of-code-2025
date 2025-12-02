@@ -52,6 +52,7 @@ public class App {
     return DayStats.builder()
         .day(2)
         .partOneDurationNs(timeWarmedUpFunction(() -> day02.solvePart01(idRanges)))
+        .partTwoDurationNs(timeWarmedUpFunction(() -> day02.solvePart02(idRanges)))
         .build();
   }
 
