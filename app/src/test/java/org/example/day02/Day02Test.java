@@ -15,7 +15,6 @@ public class Day02Test {
     this.day02 = new Day02();
     this.exampleIdRanges = day02.parseInput("input.example.txt");
     this.idRanges = day02.parseInput("input.txt");
-    System.out.println(exampleIdRanges);
   }
 
   @Test
