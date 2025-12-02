@@ -25,6 +25,6 @@ public class Day02Test {
 
   @Test
   public void testPart01() {
-    assertEquals(0L, day02.solvePart01(idRanges));
+    assertEquals(22062284697L, day02.solvePart01(idRanges));
   }
 }
