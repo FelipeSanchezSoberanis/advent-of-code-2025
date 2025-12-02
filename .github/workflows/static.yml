@@ -34,16 +34,17 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
+          distribution: "temurin"
           java-version: 25
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v5
       - name: Setup Node
         uses: actions/setup-node@v6
         with:
-          node-version: '22'
+          node-version: "22"
       - name: Build with Gradle
         id: build-with-gradle
+        continue-on-error: true
         run: |
           echo "${{ secrets.DAY01_INPUT_TXT }}" > app/src/main/resources/inputs/day01/input.txt
           echo "${{ secrets.DAY02_INPUT_TXT }}" > app/src/main/resources/inputs/day02/input.txt
@@ -51,7 +52,7 @@ jobs:
           ./gradlew test
           ./gradlew run
       - uses: actions/upload-artifact@v4
-        if:  ${{ steps.build-with-gradle.outcome == 'failure' }}
+        if: ${{ steps.build-with-gradle.outcome == 'failure' }}
         with:
           path: app/build/reports/tests/test/
           overwrite: true
@@ -65,7 +66,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'tests-report/out/'
+          path: "tests-report/out/"
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
