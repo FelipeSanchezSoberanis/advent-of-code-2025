@@ -18,6 +18,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 import org.example.day01.Day01;
+import org.example.day02.Day02;
+import org.example.day02.Day02.IdRange;
 
 public class App {
   public static <T> Long timeWarmedUpFunction(Supplier<T> func) {
@@ -44,6 +46,15 @@ public class App {
         .build();
   }
 
+  public static DayStats getDay02Stats() throws IOException {
+    Day02 day02 = new Day02();
+    List<IdRange> idRanges = day02.parseInput("input.txt");
+    return DayStats.builder()
+        .day(2)
+        .partOneDurationNs(timeWarmedUpFunction(() -> day02.solvePart01(idRanges)))
+        .build();
+  }
+
   public static Gson getGson() {
     GsonBuilder gsonBuilder = new GsonBuilder();
     gsonBuilder.registerTypeAdapter(
@@ -63,6 +74,7 @@ public class App {
 
     List<DayStats> stats = new ArrayList<>();
     stats.add(getDay01Stats());
+    stats.add(getDay02Stats());
 
     Files.writeString(
         Paths.get(System.getProperty("user.dir"), "build", "stats.json"), gson.toJson(stats));
