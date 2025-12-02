@@ -3,29 +3,30 @@
 import { Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useEffect } from "react";
+import { Chart } from "chart.js";
 
 export function ThemeToggler() {
+  const setTheme = (theme: string) => {
+    document.documentElement.setAttribute("class", theme);
+    document.documentElement.setAttribute("style", `color-scheme: ${theme};`);
+    localStorage.setItem("theme", theme);
+    if (theme === "dark" || theme === "system dark") {
+      Chart.defaults.color = "oklch(0.985 0 0)";
+    } else {
+      Chart.defaults.color = "oklch(0.145 0 0)";
+    }
+    Object.values(Chart.instances).forEach((chart) => chart.update());
+  };
+
   const handleClick = () => {
     const theme = document.documentElement.getAttribute("class");
-    if (theme === "dark" || theme === "system dark") {
-      document.documentElement.setAttribute("class", "light");
-      document.documentElement.setAttribute("style", "color-scheme: light;");
-      localStorage.setItem("theme", "light");
-    } else {
-      document.documentElement.setAttribute("class", "dark");
-      document.documentElement.setAttribute("style", "color-scheme: dark;");
-      localStorage.setItem("theme", "dark");
-    }
+    if (theme === "dark" || theme === "system dark") setTheme("light");
+    else setTheme("dark");
   };
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
-    if (!savedTheme) return;
-    document.documentElement.setAttribute("class", savedTheme);
-    document.documentElement.setAttribute(
-      "style",
-      `color-scheme: ${savedTheme};`,
-    );
+    if (savedTheme) setTheme(savedTheme);
   }, []);
 
   return (
