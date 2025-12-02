@@ -72,7 +72,7 @@ public class Day02 {
         .filter(
             id -> {
               int end = 1;
-              while (end < id.length()) {
+              while (end < id.length() / 2 + 1) {
                 if (id.charAt(0) == id.charAt(end) && id.length() % end == 0) {
                   int size = end;
                   if (IntStream.range(1, id.length() / size)
