@@ -43,12 +43,18 @@ jobs:
         with:
           node-version: '22'
       - name: Build with Gradle
+        id: build-with-gradle
         run: |
           echo "${{ secrets.DAY01_INPUT_TXT }}" > app/src/main/resources/inputs/day01/input.txt
           echo "${{ secrets.DAY02_INPUT_TXT }}" > app/src/main/resources/inputs/day02/input.txt
           gradle wrapper
           ./gradlew test
           ./gradlew run
+      - uses: actions/upload-artifact@v4
+        if:  ${{ steps.build-with-gradle.outcome == 'failure' }}
+        with:
+          path: app/build/reports/tests/test/
+          overwrite: true
       - name: Build with Node
         run: |
           cd tests-report
