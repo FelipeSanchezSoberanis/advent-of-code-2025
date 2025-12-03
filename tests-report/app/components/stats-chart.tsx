@@ -1,6 +1,6 @@
 "use client";
 
-import { Chart, registerables } from "chart.js";
+import { Chart, ChartConfiguration, ChartData, registerables } from "chart.js";
 import { DayStats } from "../page";
 import { nsToMs } from "../utils/time";
 Chart.register(...registerables);
@@ -12,11 +12,11 @@ export function StatsChart({
   stats: DayStats[];
   className?: string;
 }) {
-  const data = {
+  const data: ChartData<"doughnut", number[], string> = {
     labels: stats.reduce(
       (acc, { day, partOneDurationNs, partTwoDurationNs }) => {
-        if (partOneDurationNs) acc.push(`Day ${day}, part 1`);
-        if (partTwoDurationNs) acc.push(`Day ${day}, part 2`);
+        if (partOneDurationNs) acc.push(`${day}.1`);
+        if (partTwoDurationNs) acc.push(`${day}.2`);
         return acc;
       },
       [] as string[],
@@ -28,9 +28,6 @@ export function StatsChart({
           if (partTwoDurationNs) acc.push(nsToMs(partTwoDurationNs));
           return acc;
         }, [] as number[]),
-        labels: () => {
-          return "label";
-        },
         backgroundColor: [
           "#1F77B4",
           "#AEC7E8",
@@ -61,10 +58,10 @@ export function StatsChart({
       },
     ],
   };
-  const config = {
+  const config: ChartConfiguration<"doughnut", number[], string> = {
     type: "doughnut",
     data: data,
-  } as const;
+  };
 
   return (
     <div className={className}>
