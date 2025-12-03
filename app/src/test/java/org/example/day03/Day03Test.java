@@ -8,8 +8,8 @@ import org.junit.jupiter.api.Test;
 
 public class Day03Test {
   private final Day03 day03;
-  private final List<List<Integer>> exampleBanks;
-  private final List<List<Integer>> banks;
+  private final List<List<Long>> exampleBanks;
+  private final List<List<Long>> banks;
 
   public Day03Test() throws IOException {
     this.day03 = new Day03();
@@ -19,14 +19,21 @@ public class Day03Test {
 
   @Test
   public void testExample01() {
-    assertEquals(357, day03.solvePart01(exampleBanks));
+    assertEquals(357L, day03.solvePart01(exampleBanks));
   }
 
   @Test
   public void testPart01() {
-    assertEquals(17311, day03.solvePart01(banks));
+    assertEquals(17311L, day03.solvePart01(banks));
   }
 
   @Test
-  public void testPart02() {}
+  public void testExample02() {
+    assertEquals(3121910778619L, day03.solvePart02(exampleBanks));
+  }
+
+  @Test
+  public void testPart02() {
+    assertEquals(171419245422055L, day03.solvePart02(banks));
+  }
 }

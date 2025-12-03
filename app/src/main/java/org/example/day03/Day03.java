@@ -6,6 +6,7 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Day03 {
   private final String inputsDir;
@@ -16,29 +17,28 @@ public class Day03 {
             .toString();
   }
 
-  public List<List<Integer>> parseInput(String filename) throws IOException {
+  public List<List<Long>> parseInput(String filename) throws IOException {
     return Files.lines(Paths.get(inputsDir, filename))
         .map(
-            line ->
-                Arrays.stream(line.split("")).map(Integer::parseInt).collect(Collectors.toList()))
+            line -> Arrays.stream(line.split("")).map(Long::parseLong).collect(Collectors.toList()))
         .collect(Collectors.toList());
   }
 
-  public Integer solvePart01(List<List<Integer>> banks) {
+  public Long solvePart01(List<List<Long>> banks) {
     return banks.stream()
-        .mapToInt(
+        .mapToLong(
             batteries -> {
-              int leftBattery = Integer.MIN_VALUE;
-              int rightBattery = Integer.MIN_VALUE;
+              long leftBattery = Long.MIN_VALUE;
+              long rightBattery = Long.MIN_VALUE;
 
               int i = 0;
               while (i < batteries.size()) {
-                Integer battery = batteries.get(i);
+                Long battery = batteries.get(i);
                 boolean isLastBattery = i >= batteries.size() - 1;
 
                 if (battery > leftBattery && !isLastBattery) {
                   leftBattery = battery;
-                  rightBattery = Integer.MIN_VALUE;
+                  rightBattery = Long.MIN_VALUE;
                 } else if (battery > rightBattery) {
                   rightBattery = battery;
                 }
@@ -51,7 +51,38 @@ public class Day03 {
         .sum();
   }
 
-  public Integer solvePart02(List<List<Integer>> banks) {
-    return 0;
+  public Long solvePart02(List<List<Long>> banks) {
+    return banks.stream()
+        .mapToLong(
+            batteries -> {
+              long[] res = new long[12];
+              Arrays.fill(res, Integer.MIN_VALUE);
+
+              int i = 0;
+              while (i < batteries.size()) {
+                Long battery = batteries.get(i);
+                int j = Math.max(res.length - (batteries.size() - i), 0);
+
+                while (j < res.length) {
+                  if (battery > res[j]) {
+                    res[j] = battery;
+                    j++;
+                    while (j < res.length) {
+                      res[j] = Long.MIN_VALUE;
+                      j++;
+                    }
+                  }
+
+                  j++;
+                }
+
+                i++;
+              }
+
+              return IntStream.range(0, res.length)
+                  .mapToLong(index -> res[index] * Math.powExact(10L, res.length - index - 1))
+                  .sum();
+            })
+        .sum();
   }
 }
