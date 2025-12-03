@@ -1,16 +1,9 @@
 package org.example;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonPrimitive;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
@@ -20,6 +13,7 @@ import lombok.ToString;
 import org.example.day01.Day01;
 import org.example.day02.Day02;
 import org.example.day02.Day02.IdRange;
+import org.example.day03.Day03;
 
 public class App {
   public static <T> Long timeWarmedUpFunction(Supplier<T> func) {
@@ -56,29 +50,24 @@ public class App {
         .build();
   }
 
-  public static Gson getGson() {
-    GsonBuilder gsonBuilder = new GsonBuilder();
-    gsonBuilder.registerTypeAdapter(
-        Duration.class,
-        new JsonSerializer<Duration>() {
-          @Override
-          public JsonElement serialize(
-              Duration src, Type typeOfSrc, JsonSerializationContext context) {
-            return new JsonPrimitive(src.toString());
-          }
-        });
-    return gsonBuilder.create();
+  public static DayStats getDay03Stats() throws IOException {
+    Day03 day03 = new Day03();
+    List<List<Long>> banks = day03.parseInput("input.txt");
+    return DayStats.builder()
+        .day(3)
+        .partOneDurationNs(timeWarmedUpFunction(() -> day03.solvePart01(banks)))
+        .partTwoDurationNs(timeWarmedUpFunction(() -> day03.solvePart02(banks)))
+        .build();
   }
 
   public static void main(String[] args) throws IOException {
-    Gson gson = getGson();
-
     List<DayStats> stats = new ArrayList<>();
     stats.add(getDay01Stats());
     stats.add(getDay02Stats());
+    stats.add(getDay03Stats());
 
     Files.writeString(
-        Paths.get(System.getProperty("user.dir"), "build", "stats.json"), gson.toJson(stats));
+        Paths.get(System.getProperty("user.dir"), "build", "stats.json"), new Gson().toJson(stats));
   }
 
   @Builder
