@@ -64,7 +64,7 @@ export default async function Home() {
         <div className="md:flex md:gap-4">
           <StatsChart
             stats={stats}
-            className={cn("w-3/4 mx-auto", "md:flex-2")}
+            className={cn("w-4/5 mx-auto", "md:flex-2")}
           />
           <Accordion
             type="multiple"
