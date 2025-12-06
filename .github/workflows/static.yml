@@ -50,6 +50,7 @@ jobs:
           echo "${{ secrets.DAY02_INPUT_TXT }}" > app/src/main/resources/inputs/day02/input.txt
           echo "${{ secrets.DAY03_INPUT_TXT }}" > app/src/main/resources/inputs/day03/input.txt
           echo "${{ secrets.DAY04_INPUT_TXT }}" > app/src/main/resources/inputs/day04/input.txt
+          echo "${{ secrets.DAY05_INPUT_TXT }}" > app/src/main/resources/inputs/day05/input.txt
           gradle wrapper
           ./gradlew test
           ./gradlew run

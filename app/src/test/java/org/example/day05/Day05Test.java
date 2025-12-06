@@ -1,7 +1,6 @@
 package org.example.day05;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import org.junit.jupiter.api.Test;
@@ -29,11 +28,11 @@ public class Day05Test {
 
   @Test
   public void testExample02() {
-    assertTrue(true);
+    assertEquals(14L, day05.solvePart02(exampleInput));
   }
 
   @Test
   public void testPart02() {
-    assertTrue(true);
+    assertEquals(353716783056994L, day05.solvePart02(input));
   }
 }
