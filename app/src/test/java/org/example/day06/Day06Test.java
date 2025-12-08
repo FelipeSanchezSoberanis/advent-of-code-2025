@@ -29,11 +29,11 @@ public class Day06Test {
 
   @Test
   public void testExample02() {
-    // assertEquals(0, day06.solvePart02(exampleProblems));
+    assertEquals(3263827L, day06.solvePart02(exampleProblems));
   }
 
   @Test
   public void testPart02() {
-    // assertEquals(0, day06.solvePart02(problems));
+    assertEquals(9029931401920L, day06.solvePart02(problems));
   }
 }
