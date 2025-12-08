@@ -23,9 +23,6 @@ public class Day07 {
   }
 
   public Integer solvePart01(List<String> rows) {
-    System.out.println();
-    System.out.println();
-    System.out.println();
     Set<Integer> beams = new HashSet<>();
     beams.add(rows.getFirst().indexOf("S"));
     return rows.stream()

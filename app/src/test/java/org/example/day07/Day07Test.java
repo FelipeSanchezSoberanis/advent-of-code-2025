@@ -24,7 +24,7 @@ public class Day07Test {
 
   @Test
   public void testPart01() {
-    assertEquals(0, day07.solvePart01(rows));
+    assertEquals(1656, day07.solvePart01(rows));
   }
 
   // @Test
