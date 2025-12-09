@@ -18,6 +18,7 @@ import org.example.day04.Day04;
 import org.example.day05.Day05;
 import org.example.day06.Day06;
 import org.example.day07.Day07;
+import org.example.day08.Day08;
 
 public class App {
   public static <T> Long timeWarmedUpFunction(Supplier<T> func) {
@@ -104,6 +105,15 @@ public class App {
         .build();
   }
 
+  public static DayStats getDay08Stats() throws IOException {
+    Day08 day08 = new Day08();
+    List<Day08.JunctionBox> junctionBoxes = day08.parseInput("input.txt");
+    return DayStats.builder()
+        .day(8)
+        .partOneDurationNs(timeWarmedUpFunction(() -> day08.solvePart01(junctionBoxes, 1000)))
+        .build();
+  }
+
   public static void main(String[] args) throws IOException {
     List<DayStats> stats = new ArrayList<>();
     stats.add(getDay01Stats());
@@ -113,6 +123,7 @@ public class App {
     stats.add(getDay05Stats());
     stats.add(getDay06Stats());
     stats.add(getDay07Stats());
+    stats.add(getDay08Stats());
 
     Files.writeString(
         Paths.get(System.getProperty("user.dir"), "build", "stats.json"), new Gson().toJson(stats));
