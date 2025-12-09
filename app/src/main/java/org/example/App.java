@@ -100,6 +100,7 @@ public class App {
     return DayStats.builder()
         .day(7)
         .partOneDurationNs(timeWarmedUpFunction(() -> day07.solvePart01(rows)))
+        .partTwoDurationNs(timeWarmedUpFunction(() -> day07.solvePart02(rows)))
         .build();
   }
 

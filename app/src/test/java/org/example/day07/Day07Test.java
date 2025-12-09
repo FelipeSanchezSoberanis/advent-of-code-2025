@@ -27,13 +27,13 @@ public class Day07Test {
     assertEquals(1656, day07.solvePart01(rows));
   }
 
-  // @Test
-  // public void testExample02() {
-  //   assertEquals(3263827L, day07.solvePart02(exampleRows));
-  // }
+  @Test
+  public void testExample02() {
+    assertEquals(40L, day07.solvePart02(exampleRows));
+  }
 
-  // @Test
-  // public void testPart02() {
-  //   assertEquals(9029931401920L, day07.solvePart02(rows));
-  // }
+  @Test
+  public void testPart02() {
+    assertEquals(76624086587804L, day07.solvePart02(rows));
+  }
 }
