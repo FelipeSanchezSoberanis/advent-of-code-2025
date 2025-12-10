@@ -27,13 +27,13 @@ public class Day08Test {
     assertEquals(63920, day08.solvePart01(junctionBoxes, 1000));
   }
 
-  // @Test
-  // public void testExample02() {
-  //   assertEquals(0, day08.solvePart02(exampleJunctionBoxes));
-  // }
+  @Test
+  public void testExample02() {
+    assertEquals(25272, day08.solvePart02(exampleJunctionBoxes));
+  }
 
-  // @Test
-  // public void testPart02() {
-  //   assertEquals(0, day08.solvePart02(junctionBoxes));
-  // }
+  @Test
+  public void testPart02() {
+    assertEquals(1026594680, day08.solvePart02(junctionBoxes));
+  }
 }

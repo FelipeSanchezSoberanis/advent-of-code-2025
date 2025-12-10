@@ -115,7 +115,91 @@ public class Day08 {
   }
 
   public Integer solvePart02(List<JunctionBox> junctionBoxes) {
-    return 0;
+    List<JunctionBoxPairWithDistance> junctionBoxPairsWithDistance =
+        IntStream.range(0, junctionBoxes.size() - 1)
+            .boxed()
+            .flatMap(
+                i ->
+                    IntStream.range(i + 1, junctionBoxes.size())
+                        .boxed()
+                        .map(
+                            j ->
+                                JunctionBoxPairWithDistance.builder()
+                                    .junctionBoxOne(junctionBoxes.get(i))
+                                    .junctionBoxTwo(junctionBoxes.get(j))
+                                    .distance(
+                                        getStraightLineDistance(
+                                            junctionBoxes.get(i), junctionBoxes.get(j)))
+                                    .build()))
+            .sorted(Comparator.comparing(JunctionBoxPairWithDistance::getDistance))
+            .collect(Collectors.toList());
+
+    List<Set<JunctionBox>> circuits = new ArrayList<>();
+    for (JunctionBoxPairWithDistance junctionBoxPairWithDistance : junctionBoxPairsWithDistance) {
+      JunctionBox junctionBoxOne = junctionBoxPairWithDistance.getJunctionBoxOne();
+      JunctionBox junctionBoxTwo = junctionBoxPairWithDistance.getJunctionBoxTwo();
+
+      Optional<Set<JunctionBox>> circuitWithJunctionBoxOne =
+          circuits.stream().filter(circuit -> circuit.contains(junctionBoxOne)).findFirst();
+      Optional<Set<JunctionBox>> circuitWithJunctionBoxTwo =
+          circuits.stream().filter(circuit -> circuit.contains(junctionBoxTwo)).findFirst();
+
+      if (circuitWithJunctionBoxOne
+          .flatMap(
+              _circuitWithJunctionBoxOne ->
+                  circuitWithJunctionBoxTwo.map(
+                      _circuitWithJunctionBoxTwo -> {
+                        if (_circuitWithJunctionBoxOne == _circuitWithJunctionBoxTwo) {
+                          return true;
+                        }
+                        _circuitWithJunctionBoxOne.addAll(_circuitWithJunctionBoxTwo);
+                        circuits.remove(_circuitWithJunctionBoxTwo);
+                        return true;
+                      }))
+          .orElse(false)) {
+        if (circuits.getFirst().size() == junctionBoxes.size()) {
+          return junctionBoxOne.getX() * junctionBoxTwo.getX();
+        }
+        continue;
+      }
+
+      if (circuitWithJunctionBoxOne
+          .map(
+              _circuitWithJunctionBoxOne -> {
+                _circuitWithJunctionBoxOne.add(junctionBoxTwo);
+                return true;
+              })
+          .orElse(false)) {
+        if (circuits.getFirst().size() == junctionBoxes.size()) {
+          return junctionBoxOne.getX() * junctionBoxTwo.getX();
+        }
+        continue;
+      }
+
+      if (circuitWithJunctionBoxTwo
+          .map(
+              _circuitWithJunctionBoxTwo -> {
+                _circuitWithJunctionBoxTwo.add(junctionBoxOne);
+                return true;
+              })
+          .orElse(false)) {
+        if (circuits.getFirst().size() == junctionBoxes.size()) {
+          return junctionBoxOne.getX() * junctionBoxTwo.getX();
+        }
+        continue;
+      }
+
+      Set<JunctionBox> circuit = new HashSet<>();
+      circuit.add(junctionBoxOne);
+      circuit.add(junctionBoxTwo);
+      circuits.add(circuit);
+
+      if (circuits.getFirst().size() == junctionBoxes.size()) {
+        return junctionBoxOne.getX() * junctionBoxTwo.getX();
+      }
+    }
+
+    throw new RuntimeException("Couldn't join all junction boxes");
   }
 
   private double getStraightLineDistance(JunctionBox junctionBoxOne, JunctionBox junctionBoxTwo) {

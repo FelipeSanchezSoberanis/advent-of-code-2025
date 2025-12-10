@@ -111,6 +111,7 @@ public class App {
     return DayStats.builder()
         .day(8)
         .partOneDurationNs(timeWarmedUpFunction(() -> day08.solvePart01(junctionBoxes, 1000)))
+        .partTwoDurationNs(timeWarmedUpFunction(() -> day08.solvePart02(junctionBoxes)))
         .build();
   }
 
