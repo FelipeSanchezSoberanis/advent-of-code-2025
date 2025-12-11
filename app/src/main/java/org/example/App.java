@@ -118,7 +118,7 @@ public class App {
 
   public static DayStats getDay09Stats() throws IOException {
     Day09 day09 = new Day09();
-    List<Day09.RedTile> redTiles = day09.parseInput("input.txt");
+    List<Day09.Coordinate> redTiles = day09.parseInput("input.txt");
     return DayStats.builder()
         .day(9)
         .partOneDurationNs(timeWarmedUpFunction(() -> day09.solvePart01(redTiles)))

@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import lombok.Builder;
 import lombok.Getter;
+import tools.jackson.databind.ObjectMapper;
 
 public class Day09 {
   private final String inputsDir;
@@ -19,12 +20,12 @@ public class Day09 {
             .toString();
   }
 
-  public List<RedTile> parseInput(String filename) throws IOException {
+  public List<Coordinate> parseInput(String filename) throws IOException {
     return Files.lines(Paths.get(inputsDir, filename))
         .map(
             line -> {
               String[] parts = line.split(",");
-              return RedTile.builder()
+              return Coordinate.builder()
                   .x(Long.parseLong(parts[0]))
                   .y(Long.parseLong(parts[1]))
                   .build();
@@ -32,7 +33,7 @@ public class Day09 {
         .collect(Collectors.toList());
   }
 
-  public Long solvePart01(List<RedTile> redTiles) {
+  public Long solvePart01(List<Coordinate> redTiles) {
     return IntStream.range(0, redTiles.size() - 1)
         .boxed()
         .flatMap(
@@ -41,8 +42,8 @@ public class Day09 {
                   .boxed()
                   .map(
                       j -> {
-                        RedTile redTileOne = redTiles.get(i);
-                        RedTile redTileTwo = redTiles.get(j);
+                        Coordinate redTileOne = redTiles.get(i);
+                        Coordinate redTileTwo = redTiles.get(j);
                         return (Math.abs(redTileOne.getY() - redTileTwo.getY()) + 1)
                             * (Math.abs(redTileOne.getX() - redTileTwo.getX()) + 1);
                       });
@@ -52,19 +53,19 @@ public class Day09 {
         .getFirst();
   }
 
-  public Long solvePart02(List<RedTile> redTiles) {
+  public Long solvePart02(List<Coordinate> redTiles) {
     return null;
   }
 
   @Builder
   @Getter
-  public static class RedTile {
+  public static class Coordinate {
     private final Long x;
     private final Long y;
 
     @Override
     public String toString() {
-      return String.format("{ \"x\": %s, \"y\": %s }", getX(), getY());
+      return new ObjectMapper().writeValueAsString(this);
     }
   }
 }

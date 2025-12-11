@@ -26,6 +26,9 @@ dependencies {
     implementation libs.guava
 
     implementation 'com.google.code.gson:gson:2.13.2'
+
+    implementation 'tools.jackson.core:jackson-core:3.0.3'
+    implementation 'tools.jackson.core:jackson-databind:3.0.3'
 }
 
 // Apply a specific Java toolchain to ease working on different environments.

@@ -8,8 +8,8 @@ import org.junit.jupiter.api.Test;
 
 public class Day09Test {
   private final Day09 day09;
-  private final List<Day09.RedTile> exampleRedTiles;
-  private final List<Day09.RedTile> redTiles;
+  private final List<Day09.Coordinate> exampleRedTiles;
+  private final List<Day09.Coordinate> redTiles;
 
   public Day09Test() throws IOException {
     this.day09 = new Day09();
@@ -27,10 +27,10 @@ public class Day09Test {
     assertEquals(4781546175L, day09.solvePart01(redTiles));
   }
 
-  // @Test
-  // public void testExample02() {
-  //   assertEquals(25272, day09.solvePart02(exampleRedTiles));
-  // }
+  @Test
+  public void testExample02() {
+    assertEquals(24L, day09.solvePart02(exampleRedTiles));
+  }
 
   // @Test
   // public void testPart02() {
